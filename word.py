@@ -5,8 +5,8 @@ Q = {'q1', 'q2', 'q3', 'q4', 'q5', 'q6'}
 sigma = {'0', '1'}
 delta = {
           'q1' : {
-                  # '0' : {'q1'},
-                  '1' : {'q1', 'q2'}
+                  '0' : {'q2', 'q5'},
+                  '1' : {'q1', 'q6'}
                   },
           'q2' : {
                   '0' : {'q6'},
@@ -23,13 +23,18 @@ delta = {
           		  '0' : {'q4'},
           		  '1' : {'q3'},
           		 },
+
+          'q6' : {
+          			'0' : {'q6'},
+          			'1' : {'q6'},
+          		},
         }
 initialState = 'q1'
 F = {'q4'}
 
 automata = NFA(Q,sigma,delta,initialState,F)
 automata.view("NFA")
-nfatuple = (Q,sigma,delta,initialState,F)
+nfatuple = [Q,sigma,delta,initialState,F]
 # print (automata)
 
 def dfs(graph, start, visited=None):
@@ -86,12 +91,26 @@ def residue(nfatuple, letter):
 				reachset = reachset.union({next})
 
 		if len(reachset) == 0:
-			return None
+			reachset = None
+
+		if not(reachset == None):
+			newstatetransit = dict()
+			newstatetransit[''] = set()
+			for item in reachset:
+				newstatetransit[''] = newstatetransit[''].union({item})
+
+			# print(newstatetransit[''])
+
+			nfatuple[0] = nfatuple[0].union({initstate})
+			nfatuple[3] = initstate
+			nfatuple[2][initstate] = newstatetransit
+			return nfatuple
+
 
 
 	except KeyError:
 		reachset = None
-	print(reachset)
+	# print(reachset)
 
 # residue(nfatuple,'1')
 
@@ -108,4 +127,7 @@ def residue(nfatuple, letter):
 # print(nfafinalreach(nfatuple, 'q1'))
 
 
-residue(nfatuple, '0')
+resnfa = residue(nfatuple, '0')
+resauto = NFA(resnfa[0], resnfa[1], resnfa[2], resnfa[3], resnfa[4])
+print(resnfa)
+resauto.view("resNFA")

@@ -1,13 +1,14 @@
-digraph NFA {
+digraph resNFA {
 	graph [rankdir=LR]
 	"" [label="" shape=plaintext]
 	q4 [label=q4 shape=doublecircle]
+	q7 [label=q7 shape=circle]
 	q3 [label=q3 shape=circle]
 	q1 [label=q1 shape=circle]
 	q5 [label=q5 shape=circle]
 	q6 [label=q6 shape=circle]
 	q2 [label=q2 shape=circle]
-	"" -> q1 [label=""]
+	"" -> q7 [label=""]
 	q1 -> q5 [label=0]
 	q1 -> q2 [label=0]
 	q1 -> q6 [label=1]
@@ -21,4 +22,6 @@ digraph NFA {
 	q5 -> q3 [label=1]
 	q6 -> q6 [label=0]
 	q6 -> q6 [label=1]
+	q7 -> q5 [label="ε"]
+	q7 -> q2 [label="ε"]
 }

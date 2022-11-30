@@ -1,6 +1,5 @@
 from automathon import NFA
 
-
 Q = {'q1', 'q2', 'q3', 'q4', 'q5', 'q6'}
 sigma = {'0', '1'}
 delta = {
@@ -37,24 +36,24 @@ automata.view("NFA")
 nfatuple = [Q,sigma,delta,initialState,F]
 # print (automata)
 
-def dfs(graph, start, visited=None):
-	if visited is None:
-		visited = []
-	visited.append(start)
+# def dfs(graph, start, visited=None):
+# 	if visited is None:
+# 		visited = []
+# 	visited.append(start)
 
-	print(start)
+# 	print(start)
 
-	for next in graph[start]:
-		try:
-			if not(next in visited):
-				dfs(graph, next, visited)
+# 	for next in graph[start]:
+# 		try:
+# 			if not(next in visited):
+# 				dfs(graph, next, visited)
 
-		except KeyError:
-			continue
-	return visited
+# 		except KeyError:
+# 			continue
+# 	return visited
 
 
-def nfafinalreach(nfatuple, start, visited=None):
+def nfafinalreach(nfa, start, visited=None):
 	if visited is None:
 		visited = []
 	visited.append(start)
@@ -62,7 +61,7 @@ def nfafinalreach(nfatuple, start, visited=None):
 	# print(visited)
 	# print(start)
 	reach=set()
-	transt = nfatuple[2][start]
+	transt = nfa.delta[start]
 	try:
 		for key in transt.keys():
 			reach = reach.union(transt[key])    	
@@ -70,46 +69,48 @@ def nfafinalreach(nfatuple, start, visited=None):
 		# print(reach)
 		for next in reach:
 			if not(next in visited):
-				nfafinalreach(nfatuple, next, visited)
+				nfafinalreach(nfa, next, visited)
 
 	except KeyError:
 		# print('transit:')
 		# print(reach)
 		for next in reach:
 			if not(next in visited):
-				nfafinalreach(nfatuple, next, visited)
+				nfafinalreach(nfa, next, visited)
 	return visited
 
 
-def residue(nfatuple, letter):
-	try:
-		reachsetinit = nfatuple[2][nfatuple[3]][letter]
-		initstate = 'q' + str(len(nfatuple[0]) + 1)
-		reachset = set()
-		for next in reachsetinit:
-			if len(nfatuple[4].intersection(nfafinalreach(nfatuple,next))) > 0:
-				reachset = reachset.union({next})
+def residue(nfa, letter):
+	nfa = nfa.removeEpsilonTransitions()
+	# try:
+	reachsetinit = nfa.delta[nfa.initialState][letter]
+	print(reachsetinit)
+	initstate = 'q' + str(len(nfa.Q) + 1)
+	reachset = set()
+	for next in reachsetinit:
+		if len(nfa.F.intersection(nfafinalreach(nfa,next))) > 0:
+			reachset = reachset.union({next})
 
-		if len(reachset) == 0:
-			reachset = None
-
-		if not(reachset == None):
-			newstatetransit = dict()
-			newstatetransit[''] = set()
-			for item in reachset:
-				newstatetransit[''] = newstatetransit[''].union({item})
-
-			# print(newstatetransit[''])
-
-			nfatuple[0] = nfatuple[0].union({initstate})
-			nfatuple[3] = initstate
-			nfatuple[2][initstate] = newstatetransit
-			return nfatuple
-
-
-
-	except KeyError:
+	if len(reachset) == 0:
 		reachset = None
+
+	if not(reachset == None):
+		newstatetransit = dict()
+		newstatetransit[''] = set()
+		for item in reachset:
+			newstatetransit[''] = newstatetransit[''].union({item})
+
+		# print(newstatetransit[''])
+
+		nfa.Q = nfa.Q.union({initstate})
+		nfa.initialState = initstate
+		nfa.delta[initstate] = newstatetransit
+		return nfa
+
+
+
+	# except KeyError:
+	# 	reachset = None
 	# print(reachset)
 
 # residue(nfatuple,'1')
@@ -126,8 +127,13 @@ def residue(nfatuple, letter):
 
 # print(nfafinalreach(nfatuple, 'q1'))
 
-
-resnfa = residue(nfatuple, '0')
-resauto = NFA(resnfa[0], resnfa[1], resnfa[2], resnfa[3], resnfa[4])
+nfa = NFA(Q, sigma, delta, initialState, F)
+resnfa = residue(nfa, '0')
+# resauto = NFA(resnfa[0], resnfa[1], resnfa[2], resnfa[3], resnfa[4])
+# print(resnfa)
+# resnfa.view("resNFA")
 print(resnfa)
-resauto.view("resNFA")
+
+# noepautomata = automata.removeEpsilonTransitions()
+# noepautomata.view("Epfree")
+# print (noepautomata.initialState)

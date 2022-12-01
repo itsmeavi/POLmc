@@ -150,7 +150,7 @@ deltaw = {
 	}
 
 initstatew = 'q1'
-Fw = 'q22'
+Fw = {'q22'}
 
 
 
@@ -449,7 +449,7 @@ def findarginformula(phi):
 	elif phi[0] == 'K':
 		# print('K')
 		# print('first index mark')
-		if phi[0:3] == 'KP':
+		if phi[0:2] == 'KP':
 			argstring = phi[1:len(phi)]
 			return findargs(argstring)
 
@@ -478,7 +478,7 @@ def findarginformula(phi):
 
 
 def wordMC(model,phi):
-	satworlds = set
+	satworlds = set()
 	if phi[0] == 'A':
 		arglist = findarginformula(phi)
 		for arg in arglist:
@@ -497,6 +497,9 @@ def wordMC(model,phi):
 		arglist = findarginformula(phi)
 		if len(arglist) > 1:
 			raise Exception("Syntax Error")
+
+		# print("formula {}".format(arglist[0]))
+		# print("For formula {}, {}".format(arglist[0], wordMC(model, arglist[0])))
 		satworlds = model['worlds'].difference(wordMC(model, arglist[0]))
 		return satworlds
 
@@ -504,6 +507,9 @@ def wordMC(model,phi):
 		arglist = findarginformula(phi)
 		if len(arglist) > 2:
 			raise Exception("Syntax Error")
+
+		# print("formula {}".format(arglist[1]))
+		# print("For formula {}, {}".format(arglist[1], wordMC(model, arglist[1])))
 		satKworlds = wordMC(model, arglist[1])
 		for world in model['worlds']:
 			for satworld in satKworlds:
@@ -518,14 +524,32 @@ def wordMC(model,phi):
 		if len(arglist) > 2:
 			raise Exception("Syntax Error")
 
+		modelprime = model
 		for c in arglist[0]:
-			modelprime = model
 			for world in modelprime['worlds']:
 				modelprime['expectation'][world] = residue(modelprime['expectation'][world], c)
 				if modelprime['expectation'][world] == None:
 					modelprime['worlds'] = modelprime['worlds'].difference({world})
-					for 
+					for agent in modelprime['relation'].keys():
+						modelprime['relation'][agent].pop(world)
+						for s in modelprime['relation'][agent].keys():
+							modelprime['relation'][agent][s] = modelprime['relation'][agent][s].difference({world})
 
+		if len(modelprime['worlds']) > 0:
+			return wordMC(modelprime, arglist[1])
+
+		else:
+			return {}
+
+
+
+	else:
+		satworlds = set()
+		for world in model['worlds']:
+			if phi in model['valuation'][world]:
+				satworlds = satworlds.union({world})
+
+		return satworlds
 
 
 
@@ -563,3 +587,11 @@ def wordMC(model,phi):
 
 # patrolafterright = residue(patrolautomata, 'r')
 # patrolafterright.view("patrolexpectafterrright")
+
+print(wordMC(dronemodel, 'DIM(rrr,NOT(KP(a,NOT(w))))'))
+
+# reswater = residue(waterautomata, 'r')
+# reswater.view('reswater')
+
+# noepwater = waterautomata.removeEpsilonTransitions()
+# noepwater.view('noepwater')

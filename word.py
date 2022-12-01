@@ -31,28 +31,291 @@ delta = {
 initialState = 'q1'
 F = {'q4'}
 
-automata = NFA(Q,sigma,delta,initialState,F)
-automata.view("NFA")
-nfatuple = [Q,sigma,delta,initialState,F]
-# print (automata)
 
-# def dfs(graph, start, visited=None):
-# 	if visited is None:
-# 		visited = []
-# 	visited.append(start)
+Qp = {'q1', 'q2', 'q3', 'q4', 'q5'}
+sigmamodel = {'r', 'd', 'l', 'u'}
+deltap = {
+			'q1' : {
+					'r' : {'q2'},
+					},
+			'q2' : {
+					'r' : {'q2'},
+					'd' : {'q3'},
+					},
 
-# 	print(start)
+			'q3' : {
+					'd' : {'q3'},
+					'l' : {'q4'},
+					},
+			'q4' : {
+					'l' : {'q4'},
+					'u' : {'q5'},
+					},
+			'q5' : {
+					'u' : {'q5'},
+					''  : {'q1'},
+					},
+		}
+initstatep = 'q1'
+Fp = {'q1', 'q5'}
 
-# 	for next in graph[start]:
-# 		try:
-# 			if not(next in visited):
-# 				dfs(graph, next, visited)
-
-# 		except KeyError:
-# 			continue
-# 	return visited
 
 
+Qw = {'q1','q2','q3','q4','q5','q6','q7','q8', 'q9','q10','q11','q12','q13','q14','q15','q16','q17','q18','q19','q20','q21','q22'}
+deltaw = {
+		'q1' : { 
+				'':{'q2', 'q8'},
+		       },
+		       
+		'q2' : { 
+				'':{'q3', 'q4'},
+		       },
+		       
+		'q3' : { 
+				'r':{'q5'},
+		       },
+		       
+		'q4' : { 
+				'u':{'q6'},
+		       },
+		       
+		'q5' : { 
+				'':{'q7'},
+		       },
+		       
+		'q6' : { 
+				'':{'q7'},
+		       },
+		       
+		'q7' : { 
+				'':{'q2', 'q8'},
+		       },     
+		
+		'q8' : { 
+				'':{'q9', 'q10', 'q11'},
+		       },
+		       
+		'q9' : { 
+				'd':{'q12'},
+		       },                     
+
+		'q10' : { 
+				'l':{'q13'},
+		       },
+		       
+		'q11' : { 
+				'':{'q14'},
+		       },      
+
+		'q12' : { 
+				'':{'q15'},
+		       },
+		       
+		'q13' : { 
+				'':{'q15'},
+		       },
+		       
+		'q14' : { 
+				'':{'q15'},
+		       },
+		       
+		'q15' : { 
+				'':{'q16', 'q22'},
+		       },          
+		       
+		'q16' : { 
+				'':{'q17', 'q18'},
+		       },
+		       
+		'q17' : { 
+				'r':{'q19'},
+		       },
+		       
+		'q18' : { 
+				'u':{'q20'},
+		       },
+		       
+		'q19' : { 
+				'':{'q21'},
+		       },
+		       
+		'q20' : { 
+				'':{'q21'},
+		       },
+		       
+		'q21' : { 
+				'':{'q22', 'q16'},
+		       },
+		       		       
+	}
+
+initstatew = 'q1'
+Fw = 'q22'
+
+
+
+
+
+
+Qpw = {'q1','q2','q3','q4','q5','q6','q7','q8', 'q9','q10','q11','q12','q13','q14','q15','q16','q17','q18','q19','q20','q21','q22'}
+sigmamodel = {'r', 'd', 'l', 'u'}
+deltapw = {
+		'q1' : { 
+				'':{'q2', 'q8'},
+		       },
+		       
+		'q2' : { 
+				'':{'q3', 'q4'},
+		       },
+		       
+		'q3' : { 
+				'l':{'q5'},
+		       },
+		       
+		'q4' : { 
+				'd':{'q6'},
+		       },
+		       
+		'q5' : { 
+				'':{'q7'},
+		       },
+		       
+		'q6' : { 
+				'':{'q7'},
+		       },
+		       
+		'q7' : { 
+				'':{'q2', 'q8'},
+		       },     
+		
+		'q8' : { 
+				'':{'q9', 'q10', 'q11'},
+				},		       
+		'q9' : { 
+				'u':{'q12'},
+		       },                     
+
+		'q10' : { 
+				'r':{'q13'},
+		       },
+		       
+		'q11' : { 
+				'':{'q14'},
+		       },      
+
+		'q12' : { 
+				'':{'q15'},
+		       },
+		       
+		'q13' : { 
+				'':{'q15'},
+		       },
+		       
+		'q14' : { 
+				'':{'q15'},
+		       },
+		       
+		'q15' : { 
+				'':{'q16', 'q22'},
+				},          
+		       
+		'q16' : { 
+				'':{'q17', 'q18'},
+		       },
+		       
+		'q17' : { 
+				'l':{'q19'},
+		       },
+		       
+		'q18' : { 
+				'd':{'q20'},
+		       },
+		       
+		'q19' : { 
+				'':{'q21'},
+		       },
+		       
+		'q20' : { 
+				'':{'q21'},
+		       },
+		       
+		'q21' : { 
+				'':{'q22', 'q16'},
+		       },
+		       
+		# 'q22' : { 
+		# 		//eta nije dekhe nin borda
+		#        },
+		       
+	}
+
+initstatepw = 'q1'
+Fpw = {'q22'}
+
+patrolautomata = NFA(Qp, sigmamodel, deltap, initstatep, Fp)
+patrolautomata.view("patrolexpect")
+
+waterautomata = NFA(Qw, sigmamodel, deltaw, initstatew, Fw)
+waterautomata.view("waterexpect")
+
+powerautomata = NFA(Qpw, sigmamodel, deltapw, initstatepw, Fpw)
+powerautomata.view("powerexpect")
+
+#--------------------------------------------------------------------Model-------------------------------------------------------------#
+
+worlds = {'s', 't', 'u'}
+agents = {'a', 'b'}
+propositions = {'w', 'p', 'r'}
+relation = {
+			'a' : {
+						'u' : {'u', 's', 't'},
+						's' : {'u', 's', 't'},
+						't' : {'u', 's', 't'},
+				  },
+			'b' : {
+						'u' : {'u'},
+						's' : {'s', 't'},
+						't' : {'s', 't'},
+				  },
+			}
+
+valuation = {
+			's' : {'w'},
+			'u' : {'p'},
+			't' : {'r'},
+			}
+
+expect = {
+			's' : waterautomata,
+			'u' : patrolautomata,
+			't' : powerautomata
+		}
+
+
+dronemodel = (worlds, agents, propositions, relation, valuation, expect)
+
+
+
+#----------------------------------------------------------------------Input Ends------------------------------------------------------#
+
+# automata = NFA(Q,sigma,delta,initialState,F)
+# automata.view("NFA")
+# nfatuple = [Q,sigma,delta,initialState,F]
+
+# patrolautomata = NFA(Qp, sigmamodel, deltap, initstatep, Fp)
+# patrolautomata.view("patrolexpect")
+
+# waterautomata = NFA(Qw, sigmamodel, deltaw, initstatew, Fw)
+# waterautomata.view("waterexpect")
+
+# powerautomata = NFA(Qpw, sigmamodel, deltapw, initstatepw, Fpw)
+# powerautomata.view("powerexpect")
+
+
+
+
+
+#----------------------------------------------------------------Function Starts-------------------------------------------------------#
 def nfafinalreach(nfa, start, visited=None):
 	if visited is None:
 		visited = []
@@ -81,10 +344,12 @@ def nfafinalreach(nfa, start, visited=None):
 
 
 def residue(nfa, letter):
+	if letter == '':
+		return nfa
 	nfa = nfa.removeEpsilonTransitions()
 	# try:
 	reachsetinit = nfa.delta[nfa.initialState][letter]
-	print(reachsetinit)
+	# print(reachsetinit)
 	initstate = 'q' + str(len(nfa.Q) + 1)
 	reachset = set()
 	for next in reachsetinit:
@@ -108,6 +373,99 @@ def residue(nfa, letter):
 		return nfa
 
 
+def findargs(argstring):
+	args = list()
+	parencount = 0
+	index = 0
+	markstartindex = 0
+	for c in argstring:
+		if c == '(':
+			parencount = parencount + 1
+		
+		if c == ')':
+			parencount = parencount - 1
+
+		if parencount == 1 and c == '(':
+			markstartindex = index + 1
+			
+		if parencount == 1 and c == ',':
+			args.append(argstring[markstartindex:index])
+			markstartindex = index + 1
+
+		if parencount == 0 and index > 0:
+			args.append(argstring[markstartindex:index])
+
+		index = index + 1
+
+	return args
+
+
+
+
+def findarginformula(phi):
+	args = list()
+	if phi[0] == 'A':
+		# print('first index mark')
+		if phi[0:3] == 'AND':
+			argstring = phi[3:len(phi)]
+			return findargs(argstring)
+
+
+		else:
+			raise Exception("Syntax Error")
+		
+	elif phi[0] == 'O':
+		# print('O')
+		# print('first index mark')
+		if phi[0:2] == 'OR':
+			argstring = phi[2:len(phi)]
+			return findargs(argstring)
+
+
+		else:
+			raise Exception("Syntax Error")
+
+	elif phi[0] == 'N':
+		# print('N')
+		# print('first index mark')
+		if phi[0:3] == 'NOT':
+			argstring = phi[3:len(phi)]
+			return findargs(argstring)
+
+
+		else:
+			raise Exception("Syntax Error")
+
+	elif phi[0] == 'K':
+		# print('K')
+		# print('first index mark')
+		if phi[0:2] == 'K(':
+			argstring = phi[1:len(phi)]
+			return findargs(argstring)
+
+
+		else:
+			raise Exception("Syntax Error")
+
+	elif phi[0] == 'B':
+		# print('B')
+		# print('first index mark')
+		if phi[0:3] == 'BOX':
+			argstring = phi[3:len(phi)]
+			return findargs(argstring)
+
+
+		else:
+			raise Exception("Syntax Error")
+
+	else:
+		raise Exception("atom or Syntax Error")
+
+
+
+
+
+
 
 	# except KeyError:
 	# 	reachset = None
@@ -127,13 +485,17 @@ def residue(nfa, letter):
 
 # print(nfafinalreach(nfatuple, 'q1'))
 
-nfa = NFA(Q, sigma, delta, initialState, F)
-resnfa = residue(nfa, '0')
+# nfa = NFA(Q, sigma, delta, initialState, F)
+# resnfa = residue(nfa, '0')
 # resauto = NFA(resnfa[0], resnfa[1], resnfa[2], resnfa[3], resnfa[4])
 # print(resnfa)
 # resnfa.view("resNFA")
-print(resnfa)
+# print(resnfa)
 
 # noepautomata = automata.removeEpsilonTransitions()
 # noepautomata.view("Epfree")
 # print (noepautomata.initialState)
+
+
+# patrolafterright = residue(patrolautomata, 'r')
+# patrolafterright.view("patrolexpectafterrright")

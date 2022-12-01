@@ -4,7 +4,7 @@ Q = {'q1', 'q2', 'q3', 'q4', 'q5', 'q6'}
 sigma = {'0', '1'}
 delta = {
           'q1' : {
-                  '0' : {'q2', 'q5'},
+                  # '0' : {'q2', 'q5'},
                   '1' : {'q1', 'q6'}
                   },
           'q2' : {
@@ -292,7 +292,15 @@ expect = {
 		}
 
 
-dronemodel = (worlds, agents, propositions, relation, valuation, expect)
+dronemodel = {
+				'worlds' : worlds, 
+				'agents' : agents, 
+				'propositions' : propositions, 
+				'relation' : relation, 
+				'valuation' : valuation, 
+				'expectation' : expect,
+
+			}
 
 
 
@@ -344,6 +352,8 @@ def nfafinalreach(nfa, start, visited=None):
 
 
 def residue(nfa, letter):
+	if nfa == None:
+		return None
 	if letter == '':
 		return nfa
 	nfa = nfa.removeEpsilonTransitions()
@@ -439,7 +449,7 @@ def findarginformula(phi):
 	elif phi[0] == 'K':
 		# print('K')
 		# print('first index mark')
-		if phi[0:2] == 'K(':
+		if phi[0:3] == 'KP':
 			argstring = phi[1:len(phi)]
 			return findargs(argstring)
 
@@ -447,10 +457,10 @@ def findarginformula(phi):
 		else:
 			raise Exception("Syntax Error")
 
-	elif phi[0] == 'B':
+	elif phi[0] == 'D':
 		# print('B')
 		# print('first index mark')
-		if phi[0:3] == 'BOX':
+		if phi[0:3] == 'DIM':
 			argstring = phi[3:len(phi)]
 			return findargs(argstring)
 
@@ -462,6 +472,59 @@ def findarginformula(phi):
 		raise Exception("atom or Syntax Error")
 
 
+
+
+
+
+
+def wordMC(model,phi):
+	satworlds = set
+	if phi[0] == 'A':
+		arglist = findarginformula(phi)
+		for arg in arglist:
+			 satworlds = satworlds.intersection(wordMC(model,arg))
+
+		return satworlds
+
+	elif phi[0] == 'O':
+		arglist = findarginformula(phi)
+		for arg in arglist:
+			satworlds = satworlds.union(wordMC(model, arg))
+
+		return satworlds
+
+	elif phi[0] == 'N':
+		arglist = findarginformula(phi)
+		if len(arglist) > 1:
+			raise Exception("Syntax Error")
+		satworlds = model['worlds'].difference(wordMC(model, arglist[0]))
+		return satworlds
+
+	elif phi[0] == 'K':
+		arglist = findarginformula(phi)
+		if len(arglist) > 2:
+			raise Exception("Syntax Error")
+		satKworlds = wordMC(model, arglist[1])
+		for world in model['worlds']:
+			for satworld in satKworlds:
+				if satworld in model['relation'][arglist[0]][world]:
+					satworlds = satworlds.union({world})
+
+		return satworlds
+
+
+	elif phi[0] == 'D':
+		arglist = findarginformula(phi)
+		if len(arglist) > 2:
+			raise Exception("Syntax Error")
+
+		for c in arglist[0]:
+			modelprime = model
+			for world in modelprime['worlds']:
+				modelprime['expectation'][world] = residue(modelprime['expectation'][world], c)
+				if modelprime['expectation'][world] == None:
+					modelprime['worlds'] = modelprime['worlds'].difference({world})
+					for 
 
 
 
@@ -486,7 +549,8 @@ def findarginformula(phi):
 # print(nfafinalreach(nfatuple, 'q1'))
 
 # nfa = NFA(Q, sigma, delta, initialState, F)
-# resnfa = residue(nfa, '0')
+# resnfa = residue(residue(nfa, '0'), '0')
+# print(resnfa)
 # resauto = NFA(resnfa[0], resnfa[1], resnfa[2], resnfa[3], resnfa[4])
 # print(resnfa)
 # resnfa.view("resNFA")

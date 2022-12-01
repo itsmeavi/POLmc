@@ -1,10 +1,10 @@
 digraph patrolexpect {
 	graph [rankdir=LR]
 	"" [label="" shape=plaintext]
-	q5 [label=q5 shape=doublecircle]
 	q1 [label=q1 shape=doublecircle]
-	q2 [label=q2 shape=circle]
+	q5 [label=q5 shape=doublecircle]
 	q3 [label=q3 shape=circle]
+	q2 [label=q2 shape=circle]
 	q4 [label=q4 shape=circle]
 	"" -> q1 [label=""]
 	q1 -> q2 [label=r]

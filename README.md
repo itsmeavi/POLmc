@@ -1,6 +1,19 @@
 # POLmc
 
 Implementation of Word fragment of the POL model checking in the paper: https://arxiv.org/abs/2205.00784
+Also published in THE 31ST INTERNATIONAL JOINT CONFERENCE ON ARTIFICIAL INTELLIGENCE (IJCAI-ECAI 22)
+By Sourav Chakraborty, Avijeet Ghosh, Sujata Ghosh, Francois Schwarzentruber
+
+
+Prerequisite packge:
+pip install automathon
+
+*If after installing automathon, running word.py on Python3 still gives error: FileNotFoundError for file or directory 'dot', using the following command can help:*
+sudo apt install graphviz
+
+
+
+
 
 The file has the drone model and the plan verification formula in the paper as input and the function wordMC has been called on it.
 

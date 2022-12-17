@@ -324,7 +324,7 @@ dronemodel = {
 
 
 #----------------------------------------------------------------Function Starts-------------------------------------------------------#
-def nfafinalreach(nfa, start, visited=None):
+def nfafinalreach(nfa, start, visited=None): #function that returns a set of states that can be reached from state "start" in the NFA "nfa"
 	if visited is None:
 		visited = []
 	visited.append(start)
@@ -351,7 +351,7 @@ def nfafinalreach(nfa, start, visited=None):
 	return visited
 
 
-def residue(nfa, letter):
+def residue(nfa, letter): #returns the residue of the "nfa", residued by letter "a"
 	if nfa == None:
 		return None
 	if letter == '':
@@ -383,7 +383,7 @@ def residue(nfa, letter):
 		return nfa
 
 
-def findargs(argstring):
+def findargs(argstring): #Given argstring = "OP(arg1,arg2)", this function returns the list args = ["arg1","arg2"], where arg1, arg2 are further formulas, and OP\in\{AND,OR,KP,DIM,NOT\} 
 	args = list()
 	parencount = 0
 	index = 0
@@ -412,7 +412,7 @@ def findargs(argstring):
 
 
 
-def findarginformula(phi):
+def findarginformula(phi): #Given phi = "OP(arg1,arg2)", this function returns the list args = ["arg1","arg2"], where arg1, arg2 are further formulas, and OP\in\{AND,OR,KP,DIM,NOT\} 
 	args = list()
 	if phi[0] == 'A':
 		# print('first index mark')
@@ -477,23 +477,23 @@ def findarginformula(phi):
 
 
 
-def wordMC(model,phi):
+def wordMC(model,phi): #model checker where given model, returns set of worlds where phi stands true, else returns set(), which suggests is not true in either of the worlds
 	satworlds = set()
-	if phi[0] == 'A':
+	if phi[0] == 'A': #AND case
 		arglist = findarginformula(phi)
 		for arg in arglist:
 			 satworlds = satworlds.intersection(wordMC(model,arg))
 
 		return satworlds
 
-	elif phi[0] == 'O':
+	elif phi[0] == 'O': #OR case
 		arglist = findarginformula(phi)
 		for arg in arglist:
 			satworlds = satworlds.union(wordMC(model, arg))
 
 		return satworlds
 
-	elif phi[0] == 'N':
+	elif phi[0] == 'N': #NOT case
 		arglist = findarginformula(phi)
 		if len(arglist) > 1:
 			raise Exception("Syntax Error")
@@ -503,7 +503,7 @@ def wordMC(model,phi):
 		satworlds = model['worlds'].difference(wordMC(model, arglist[0]))
 		return satworlds
 
-	elif phi[0] == 'K':
+	elif phi[0] == 'K': #KP case (possibility)
 		arglist = findarginformula(phi)
 		if len(arglist) > 2:
 			raise Exception("Syntax Error")
@@ -519,7 +519,7 @@ def wordMC(model,phi):
 		return satworlds
 
 
-	elif phi[0] == 'D':
+	elif phi[0] == 'D': #DIM case (diamond operator)
 		arglist = findarginformula(phi)
 		if len(arglist) > 2:
 			raise Exception("Syntax Error")
